@@ -36,6 +36,20 @@ app.post('/', function(req, res) {
 app.get('/', function(req, res) {
   res.render('index');
 });
+
+function duolingoWorks() {
+    function (request, response) {
+        for (i = 0; i < response["session_elements"].length; i++) {
+            element = response["session_elements"][i];
+            if (element["type"] == "translate") {
+                sendMessage(element["sentence"]);
+            } else {
+                
+            }
+        }
+    }
+}
+                
  
 function processAnswer(answer) {
   if (answer === answers[i]) {
