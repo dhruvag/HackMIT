@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 var questions = ['Cxu vi volas danci kun min?', 'Mi fartas bone, kaj vi?', 
   'Miaj gepatroj mangxis pomojn en nia domo.'];
-var answers = ['Do you want to dance with me?', 'I feel good, and you?', 'My parents ate apples in our house.'];
+var answers = ['do you want to dance with me?', 'i feel good, and you?', 'my parents ate apples in our house.'];
 
 
 // Twilio Credentials 
@@ -31,16 +31,20 @@ var totalScore = (questions.length * 10);
 var questionsRemaining = questions.length;
 var currentScore = 0;
 var phoneNumber = '+17148555951';
+var quizBegan = false;
 
 app.post('/', function(req, res) {
-  var answer = req.body.Body.trim();
+  var answer = req.body.Body.trim().toLowerCase();
   console.log(answer);
-  if (answer === 'Begin') {
+  if (answer === 'begin') {
     sendMessage("Welcome to DuolingoText! Your quiz will begin shortly. You will be sent a sentence to translate and after every corrrect translation, your score will increase by 10 points.");
     //TO FINISH: Create a get request that points to http://localhost:5000/get_new_question. Coment it out. Store in a variable called "elements")
-    setTimeout(function(){
-        beginQuiz();
-        //beginDuolingoQuiz(elements);
+    setTimeout(function() {
+      i = 0;
+      quizBegan = true;
+      questionsRemaining = questions.length;
+      currentScore = 0;
+      sendMessage((i + 1) + '. TRANSLATE: ' + questions[0]);
     }, 3500); 
   } else {
       processAnswer(answer);
@@ -49,8 +53,9 @@ app.post('/', function(req, res) {
 });
 
 app.post('/beginquiz', function(req, res) {
-  sendMessage('Thanks for joining DuolingoText! Text BEGIN to start your quiz.');
   phoneNumber = req.body.phoneNumber;
+  sendMessage('Thanks for joining DuolingoText! Text BEGIN to start your quiz.');
+  console.log(phoneNumber);
 });
 
 app.get('/', function(req, res) {
@@ -70,8 +75,10 @@ function beginDuolingoQuiz(elements) {
                 
 
 function processAnswer(answer) {
+  if (!quizBegan) {
+    sendMessage('Sorry, didn\'t get that. Text BEGIN to start your quiz.');
+  }
   questionsRemaining--;
-
   if (answer === answers[i]) {
     currentScore = currentScore + 10;
     sendMessage('Correct. Your current score is: ' + currentScore + '/' + totalScore + '. There are ' + questionsRemaining + ' questions remaining.');
@@ -93,13 +100,9 @@ function processAnswer(answer) {
   setTimeout(function() {
     if (questionsRemaining === 0) {
       sendMessage('That\'s it! Your final score is ' + currentScore + '/' + totalScore + '. We hope you enjoyed DuolingoText!');
+      quizBegan = false;
     }
   }, 3500); 
-}
-
-function beginQuiz() {
-  i = 0;
-  sendMessage((i + 1) + '. TRANSLATE: ' + questions[0]);
 }
 
 
