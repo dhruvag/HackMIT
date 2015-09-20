@@ -22,11 +22,15 @@ var authToken = 'f0735535ecf34dbad72f7ce50eff0e77';
 var twilio = require('twilio')(accountSid, authToken); 
 
 var i = 0;
+var totalScore = questions.length();
+var questionsRemaining = questions.length();
+var currentScore = 0;
 
 app.post('/', function(req, res) {
   var answer = req.body.Body;
   console.log(answer);
   if (answer === 'Begin') {
+    sendMessage("Welcome to DuolingoText! Your quiz will begin shortly. You will be sent a sentence to translate and after every corrrect translation, your score will increase by 10 points.");
     beginQuiz();
   } else {
     processAnswer(answer);
@@ -52,12 +56,16 @@ function duolingoWorks() {
                 
  
 function processAnswer(answer) {
+  
   if (answer === answers[i]) {
-    sendMessage('Correct.');
+    currentScore = currentScore + 10;
+    questionsRemaining--;
+    sendMessage('Correct. Your current score is: ' + currentScore + '/' + totalScore + '. There are ' + questionsRemaining + 'questions remaining.');
     i++;
     sendMessage((i + 1) + '. TRANSLATE: ' + questions[i]);
   } else {
-    sendMessage('Incorrect. The correct answer is: ' + answers[i]);
+    questionsRemaining--
+    sendMessage('Incorrect. The correct answer is: ' + answers[i] + 'Your current score is: ' + currentScore + '/' + totalScore + '. There are ' + questionsRemaining + 'questionsRemaining.');
     i++;
     sendMessage((i + 1) + '. TRANSLATE: ' + questions[i]);
   }
