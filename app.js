@@ -49,7 +49,9 @@ app.get('/', function(req, res) {
 });
  
 function processAnswer(answer) {
-  
+  if (i == questions.length + 1) {
+    sendMessage('That\'s it! Your final score is ' + currentScore + '/' + totalScore + '. We hope you enjoyed DuolingoText!');
+  }  
   if (answer === answers[i]) {
     currentScore = currentScore + 10;
     questionsRemaining--;
