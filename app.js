@@ -2,6 +2,14 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 app.set('port', process.env.PORT || 3000);
+
+var path = require('path');
+app.set('views', __dirname + 'public');
+app.engine('.html', require('ejs').__express);
+app.set('view engine', 'html');
+//app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -17,6 +25,10 @@ app.post('/', function(req, res) {
   console.log(answer);
   processAnswer(answer);
   //console.log('got request.');
+});
+
+app.get('/', function(req, res) {
+  res.render('index');
 });
  
 function processAnswer(answer) {
