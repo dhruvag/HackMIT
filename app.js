@@ -30,6 +30,7 @@ var i = 0;
 var totalScore = (questions.length * 10);
 var questionsRemaining = questions.length;
 var currentScore = 0;
+var phoneNumber = '+17148555951';
 
 app.post('/', function(req, res) {
   var answer = req.body.Body.trim();
@@ -49,6 +50,7 @@ app.post('/', function(req, res) {
 
 app.post('/beginquiz', function(req, res) {
   sendMessage('Thanks for joining DuolingoText! Text BEGIN to start your quiz.');
+  phoneNumber = req.body.phoneNumber;
 });
 
 app.get('/', function(req, res) {
@@ -103,7 +105,7 @@ function beginQuiz() {
 
 function sendMessage(question) {
   twilio.sendMessage({  
-    to: '+17148555951', 
+    to: phoneNumber, 
     from: '+16692366110',  
     body: question 
   }, function(err, responseData) { 
