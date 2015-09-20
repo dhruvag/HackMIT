@@ -23,6 +23,17 @@ var spanish_questions = ["Hóla, cómo estás?", "Queremos establecer un gubiern
 
 var spanish_answers = ["Hello, how are you?", "We want to establish a government.", "You are a marvelous person!"];
 
+var data = {
+    "spanish": {
+        "questions": ["Hóla, cómo estás?", "Queremos establecer un gubierno.", "Eres un hombre maravilloso!"],
+        "answers": ["Hello, how are you?", "We want to establish a government.", "You are a marvelous person!"],
+    },
+    "esperanto": {
+        "questions": ['Cxu vi volas danci kun min?', 'Mi fartas bone, kaj vi?', 'Miaj gepatroj mangxis pomojn en nia domo.'],
+        "answers": ['Do you want to dance with me?', 'I feel good, and you?', 'My parents ate apples in our house.'],
+    }
+}
+
 // Twilio Credentials 
 var accountSid = 'AC72016383be9f931c93aa652b48e308ba'; 
 var authToken = 'f0735535ecf34dbad72f7ce50eff0e77'; 
@@ -36,17 +47,28 @@ var questionsRemaining = questions.length;
 var currentScore = 0;
 var phoneNumber = '+17148555951';
 
+language = "Esperanto";
 app.post('/', function(req, res) {
   var answer = req.body.Body.trim();
   console.log(answer);
   if (answer === 'Begin') {
-    sendMessage("Welcome to DuolingoText! Your quiz will begin shortly. You will be sent a sentence to translate and after every corrrect translation, your score will increase by 10 points.");
+      sendMessage("Welcome to DuolingoText! Your quiz will begin shortly. You will be sent a sentence to translate and after every corrrect translation, your score will increase by 10 points.");
+      setTimeout(function() {
+          sendMessage("Please select a language: Esperanto or Spanish?");
+      }, 2500);
     //TO FINISH: Create a get request that points to http://localhost:5000/get_new_question. Coment it out. Store in a variable called "elements")
     setTimeout(function(){
         beginQuiz();
         //beginDuolingoQuiz(elements);
     }, 3500); 
-  } else {
+  } else if (answer === "Esperanto") {
+      sendMessage("Great! You chose Esperanto.");
+      language = "Esperanto";
+  } else if (answer === "Spanish") {
+      sendMessage("Great! You chose Spanish.");
+      language = "Spanish";
+  } 
+  else {
       processAnswer(answer);
       //processDuolingoAnswer();
   }
@@ -76,21 +98,21 @@ function beginDuolingoQuiz(elements) {
 function processAnswer(answer) {
   questionsRemaining--;
 
-  if (answer === answers[i]) {
+    if (answer === data[language]["answers"][i]) {
     currentScore = currentScore + 10;
     sendMessage('Correct. Your current score is: ' + currentScore + '/' + totalScore + '. There are ' + questionsRemaining + ' questions remaining.');
     i++;
     setTimeout(function() {
       if (questionsRemaining !== 0) {
-        sendMessage((i + 1) + '. TRANSLATE: ' + questions[i]);
+          sendMessage((i + 1) + '. TRANSLATE: ' + data[language]["questions"][i]);
       }
     }, 3500); 
   } else {
-    sendMessage('Incorrect. The correct answer is: ' + answers[i] + ' Your current score is: ' + currentScore + '/' + totalScore + '. There are ' + questionsRemaining + ' questions remaining.');
+      sendMessage('Incorrect. The correct answer is: ' + data[language]["answers"][i] + ' Your current score is: ' + currentScore + '/' + totalScore + '. There are ' + questionsRemaining + ' questions remaining.');
     i++;
     setTimeout(function() {
       if (questionsRemaining !== 0) {
-        sendMessage((i + 1) + '. TRANSLATE: ' + questions[i]);
+          sendMessage((i + 1) + '. TRANSLATE: ' + data[language]["questions"][i]);
       }
     }, 3500); 
   }
@@ -103,7 +125,7 @@ function processAnswer(answer) {
 
 function beginQuiz() {
   i = 0;
-  sendMessage((i + 1) + '. TRANSLATE: ' + questions[0]);
+    sendMessage((i + 1) + '. TRANSLATE: ' + data[language]["questions"][0]);
 }
 
 
