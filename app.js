@@ -37,7 +37,7 @@ var i = 0;
 var totalScore = (questions.length * 10);
 var questionsRemaining = questions.length;
 var currentScore = 0;
-var phoneNumber = '+17148555951';
+var phoneNumber;
 var quizBegan = false;
 
 app.post('/', function(req, res) {
@@ -84,6 +84,7 @@ function beginDuolingoQuiz(elements) {
 function processAnswer(answer) {
   if (!quizBegan) {
     sendMessage('Sorry, didn\'t get that. Text BEGIN to start your quiz.');
+    return;
   }
   questionsRemaining--;
   if (answer === answers[i]) {
