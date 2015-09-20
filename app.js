@@ -14,10 +14,14 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-var questions = ['Cxu vi volas danci kun min?', 'Mi fartas bone, kaj vi?', 
-  'Miaj gepatroj mangxis pomojn en nia domo.'];
-var answers = ['Do you want to dance with me?', 'I feel good, and you?', 'My parents ate apples in our house.'];
+var esperanto_questions = ['Cxu vi volas danci kun min?', 'Mi fartas bone, kaj vi?', 
+                           'Miaj gepatroj mangxis pomojn en nia domo.'];
 
+var esperanto_answers = ['Do you want to dance with me?', 'I feel good, and you?', 'My parents ate apples in our house.'];
+
+var spanish_questions = ["Hóla, cómo estás?", "Queremos establecer un gubierno.", "Eres un hombre maravilloso!"];
+
+var spanish_answers = ["Hello, how are you?", "We want to establish a government.", "You are a marvelous person!"];
 
 // Twilio Credentials 
 var accountSid = 'AC72016383be9f931c93aa652b48e308ba'; 
