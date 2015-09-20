@@ -30,8 +30,9 @@ app.post('/', function(req, res) {
   var answer = req.body.Body;
   console.log(answer);
   if (answer === 'Begin') {
-    sendMessage("Welcome to DuolingoText! Your quiz will begin shortly. You will be sent a sentence to translate and after every corrrect translation, your score will increase by 10 points.");
-    beginQuiz();
+      sendMessage("Welcome to DuolingoText! Your quiz will begin shortly. You will be sent a sentence to translate and after every corrrect translation, your score will increase by 10 points.");
+      //TO FINISH: Create a get request that points to http://localhost:5000/get_new_question. Coment it out.
+      beginQuiz();
   } else {
     processAnswer(answer);
   }
@@ -41,22 +42,19 @@ app.get('/', function(req, res) {
   res.render('index');
 });
 
-function duolingoWorks() {
-    function (request, response) {
-        for (i = 0; i < response["session_elements"].length; i++) {
-            element = response["session_elements"][i];
-            if (element["type"] == "translate") {
-                sendMessage(element["sentence"]);
-            } else {
-                
-            }
-        }
-    }
+function processDuolingoAnswer(answer, elements) {
+    sendMessage("Correct. Your current score is: " + currentScore + '/' + totalScore + '. There are ' + (response["session_elements"].length-i) + " questions remaining.");
+    i++;
+}
+
+function beginDuolingoQuiz(elements) {
+    i=0;
+    element = elements["session_elements"][i];
+    sendMessage((i + 1) + ". TRANSLATE: " + elements[i]);
 }
                 
- 
+/*
 function processAnswer(answer) {
-  
   if (answer === answers[i]) {
     currentScore = currentScore + 10;
     questionsRemaining--;
@@ -69,7 +67,7 @@ function processAnswer(answer) {
     i++;
     sendMessage((i + 1) + '. TRANSLATE: ' + questions[i]);
   }
-}
+}*/
 
 function beginQuiz() {
   i = 0;
