@@ -68,6 +68,9 @@ function beginDuolingoQuiz(elements) {
                 
 
 function processAnswer(answer) {
+  questionsRemaining--;
+
+  if (answer === answers[i]) {
     currentScore = currentScore + 10;
     sendMessage('Correct. Your current score is: ' + currentScore + '/' + totalScore + '. There are ' + questionsRemaining + ' questions remaining.');
     i++;
