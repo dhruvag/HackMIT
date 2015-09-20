@@ -44,30 +44,40 @@ app.post('/', function(req, res) {
   }
 });
 
+app.post('/beginquiz', function(req, res) {
+
+});
+
 app.get('/', function(req, res) {
   res.render('index');
 });
  
 function processAnswer(answer) {
-  if (i == questions.length + 1) {
-    sendMessage('That\'s it! Your final score is ' + currentScore + '/' + totalScore + '. We hope you enjoyed DuolingoText!');
-  }  
+  questionsRemaining--;
+
   if (answer === answers[i]) {
     currentScore = currentScore + 10;
-    questionsRemaining--;
     sendMessage('Correct. Your current score is: ' + currentScore + '/' + totalScore + '. There are ' + questionsRemaining + ' questions remaining.');
     i++;
-    setTimeout(function(){
-      sendMessage((i + 1) + '. TRANSLATE: ' + questions[i]);
+    setTimeout(function() {
+      if (questionsRemaining !== 0) {
+        sendMessage((i + 1) + '. TRANSLATE: ' + questions[i]);
+      }
     }, 3500); 
   } else {
-    questionsRemaining--
     sendMessage('Incorrect. The correct answer is: ' + answers[i] + ' Your current score is: ' + currentScore + '/' + totalScore + '. There are ' + questionsRemaining + ' questions remaining.');
     i++;
-    setTimeout(function(){
-      sendMessage((i + 1) + '. TRANSLATE: ' + questions[i]);
+    setTimeout(function() {
+      if (questionsRemaining !== 0) {
+        sendMessage((i + 1) + '. TRANSLATE: ' + questions[i]);
+      }
     }, 3500); 
   }
+  setTimeout(function() {
+    if (questionsRemaining === 0) {
+      sendMessage('That\'s it! Your final score is ' + currentScore + '/' + totalScore + '. We hope you enjoyed DuolingoText!');
+    }
+  }, 3500); 
 }
 
 function beginQuiz() {
