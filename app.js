@@ -14,6 +14,11 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+var questions = ['Cxu vi volas danci kun min?', 'Mi fartas bone, kaj vi?', 
+  'Miaj gepatroj mangxis pomojn en nia domo.'];
+var answers = ['Do you want to dance with me?', 'I feel good, and you?', 'My parents ate apples in our house.'];
+
+
 // Twilio Credentials 
 var accountSid = 'AC72016383be9f931c93aa652b48e308ba'; 
 var authToken = 'f0735535ecf34dbad72f7ce50eff0e77'; 
@@ -22,16 +27,18 @@ var authToken = 'f0735535ecf34dbad72f7ce50eff0e77';
 var twilio = require('twilio')(accountSid, authToken); 
 
 var i = 0;
-var totalScore = questions.length();
-var questionsRemaining = questions.length();
+var totalScore = (questions.length * 10);
+var questionsRemaining = questions.length;
 var currentScore = 0;
 
 app.post('/', function(req, res) {
-  var answer = req.body.Body;
+  var answer = req.body.Body.trim();
   console.log(answer);
   if (answer === 'Begin') {
     sendMessage("Welcome to DuolingoText! Your quiz will begin shortly. You will be sent a sentence to translate and after every corrrect translation, your score will increase by 10 points.");
-    beginQuiz();
+    setTimeout(function(){
+      beginQuiz();
+    }, 3500); 
   } else {
     processAnswer(answer);
   }
@@ -46,14 +53,18 @@ function processAnswer(answer) {
   if (answer === answers[i]) {
     currentScore = currentScore + 10;
     questionsRemaining--;
-    sendMessage('Correct. Your current score is: ' + currentScore + '/' + totalScore + '. There are ' + questionsRemaining + 'questions remaining.');
+    sendMessage('Correct. Your current score is: ' + currentScore + '/' + totalScore + '. There are ' + questionsRemaining + ' questions remaining.');
     i++;
-    sendMessage((i + 1) + '. TRANSLATE: ' + questions[i]);
+    setTimeout(function(){
+      sendMessage((i + 1) + '. TRANSLATE: ' + questions[i]);
+    }, 3500); 
   } else {
     questionsRemaining--
-    sendMessage('Incorrect. The correct answer is: ' + answers[i] + 'Your current score is: ' + currentScore + '/' + totalScore + '. There are ' + questionsRemaining + 'questionsRemaining.');
+    sendMessage('Incorrect. The correct answer is: ' + answers[i] + ' Your current score is: ' + currentScore + '/' + totalScore + '. There are ' + questionsRemaining + ' questions remaining.');
     i++;
-    sendMessage((i + 1) + '. TRANSLATE: ' + questions[i]);
+    setTimeout(function(){
+      sendMessage((i + 1) + '. TRANSLATE: ' + questions[i]);
+    }, 3500); 
   }
 }
 
@@ -62,9 +73,6 @@ function beginQuiz() {
   sendMessage((i + 1) + '. TRANSLATE: ' + questions[0]);
 }
 
-var questions = ['Cxu vi volas danci kun min?', 'Mi fartas bone, kaj vi?', 
-  'Miaj gepatroj mangxis pomojn en nia domo.'];
-var answers = ['Do you want to dance with me?', 'I feel good, and you?', 'My parents ate apples in our house.'];
 
 function sendMessage(question) {
   twilio.sendMessage({  
