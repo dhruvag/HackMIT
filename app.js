@@ -21,11 +21,16 @@ var authToken = 'f0735535ecf34dbad72f7ce50eff0e77';
 //require the Twilio module and create a REST twilio client 
 var twilio = require('twilio')(accountSid, authToken); 
 
+var i = 0;
+
 app.post('/', function(req, res) {
   var answer = req.body.Body;
   console.log(answer);
-  processAnswer(answer);
-  //console.log('got request.');
+  if (answer === 'Begin') {
+    beginQuiz();
+  } else {
+    processAnswer(answer);
+  }
 });
 
 app.get('/', function(req, res) {
@@ -33,12 +38,29 @@ app.get('/', function(req, res) {
 });
  
 function processAnswer(answer) {
-  sendQuestion('2. Yo no hablo espanol.');
+  if (answer === answers[i]) {
+    sendMessage('Correct.');
+    i++;
+    sendMessage((i + 1) + '. TRANSLATE: ' + questions[i]);
+  } else {
+    sendMessage('Incorrect. The correct answer is: ' + answers[i]);
+    i++;
+    sendMessage((i + 1) + '. TRANSLATE: ' + questions[i]);
+  }
 }
 
-function sendQuestion(question) {
+function beginQuiz() {
+  i = 0;
+  sendMessage((i + 1) + '. TRANSLATE: ' + questions[0]);
+}
+
+var questions = ['Cxu vi volas danci kun min?', 'Mi fartas bone, kaj vi?', 
+  'Miaj gepatroj mangxis pomojn en nia domo.'];
+var answers = ['Do you want to dance with me?', 'I feel good, and you?', 'My parents ate apples in our house.'];
+
+function sendMessage(question) {
   twilio.sendMessage({  
-    to: '+14847022952', 
+    to: '+17148555951', 
     from: '+16692366110',  
     body: question 
   }, function(err, responseData) { 
