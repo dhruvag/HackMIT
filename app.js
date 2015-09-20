@@ -30,28 +30,45 @@ var i = 0;
 var totalScore = (questions.length * 10);
 var questionsRemaining = questions.length;
 var currentScore = 0;
+var phoneNumber = '+17148555951';
 
 app.post('/', function(req, res) {
   var answer = req.body.Body.trim();
   console.log(answer);
   if (answer === 'Begin') {
     sendMessage("Welcome to DuolingoText! Your quiz will begin shortly. You will be sent a sentence to translate and after every corrrect translation, your score will increase by 10 points.");
+    //TO FINISH: Create a get request that points to http://localhost:5000/get_new_question. Coment it out. Store in a variable called "elements")
     setTimeout(function(){
-      beginQuiz();
+        beginQuiz();
+        //beginDuolingoQuiz(elements);
     }, 3500); 
   } else {
-    processAnswer(answer);
+      processAnswer(answer);
+      //processDuolingoAnswer();
   }
 });
 
 app.post('/beginquiz', function(req, res) {
-
+  sendMessage('Thanks for joining DuolingoText! Text BEGIN to start your quiz.');
+  phoneNumber = req.body.phoneNumber;
 });
 
 app.get('/', function(req, res) {
   res.render('index');
 });
- 
+
+function processDuolingoAnswer(answer, elements) {
+    sendMessage("Correct. Your current score is: " + currentScore + '/' + totalScore + '. There are ' + (response["session_elements"].length-i) + " questions remaining.");
+    i++;
+}
+
+function beginDuolingoQuiz(elements) {
+    i=0;
+    element = elements["session_elements"][i];
+    sendMessage((i + 1) + ". TRANSLATE: " + elements[i]);
+}
+                
+
 function processAnswer(answer) {
   questionsRemaining--;
 
@@ -88,7 +105,7 @@ function beginQuiz() {
 
 function sendMessage(question) {
   twilio.sendMessage({  
-    to: '+17148555951', 
+    to: phoneNumber, 
     from: '+16692366110',  
     body: question 
   }, function(err, responseData) { 
