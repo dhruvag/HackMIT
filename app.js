@@ -45,7 +45,7 @@ app.post('/', function(req, res) {
 });
 
 app.post('/beginquiz', function(req, res) {
-
+  sendMessage('Thanks for joining DuolingoText! Text BEGIN to start your quiz.');
 });
 
 app.get('/', function(req, res) {
