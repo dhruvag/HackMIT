@@ -14,14 +14,11 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-<<<<<<< HEAD
+
 var questions = ['Cxu vi volas danci kun min?', 'Mi fartas bone, kaj vi?', 
   'Miaj gepatroj mangxis pomojn en nia domo.'];
 var answers = ['do you want to dance with me?', 'i feel good, and you?', 'my parents ate apples in our house.'];
-=======
-var esperanto_questions = ['Cxu vi volas danci kun min?', 'Mi fartas bone, kaj vi?', 
-                           'Miaj gepatroj mangxis pomojn en nia domo.'];
->>>>>>> origin/master
+
 
 var esperanto_answers = ['Do you want to dance with me?', 'I feel good, and you?', 'My parents ate apples in our house.'];
 
